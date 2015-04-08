@@ -65,8 +65,8 @@ test('track - no options', function (t) {
 
     var body = {
       rev: results[0],
-      status: 'completed',
-      branch: results[1]
+      branch: results[1],
+      status: 'completed'
     }
 
     zlib.deflate(JSON.stringify(body), function (err, buffer) {
@@ -106,8 +106,8 @@ test('track - custom rev', function (t) {
 
     var body = {
       rev: 'my-rev',
-      status: 'completed',
-      branch: branch
+      branch: branch,
+      status: 'completed'
     }
 
     zlib.deflate(JSON.stringify(body), function (err, buffer) {
@@ -206,7 +206,54 @@ test('track - custom everything', function (t) {
   })
 })
 
-test('track - error', function (t) {
+test('track - no auto', function (t) {
+  var body = {
+    rev: 'my-rev',
+    status: 'completed'
+  }
+
+  zlib.deflate(JSON.stringify(body), function (err, buffer) {
+    t.error(err)
+
+    var scope = nock('https://intake.opbeat.com')
+      .filteringRequestBody(function (body) {
+        t.equal(body, buffer.toString('hex'))
+        return 'ok'
+      })
+      .post('/api/v1/organizations/test-org-id/apps/test-app-id/releases/', 'ok')
+      .reply(202)
+
+    var tracker = ReleaseTracker({
+      appId: 'test-app-id',
+      organizationId: 'test-org-id',
+      secretToken: 'test-token',
+      auto: false
+    })
+
+    tracker({ rev: body.rev }, function (err) {
+      scope.done()
+      t.error(err)
+      t.end()
+    })
+  })
+})
+
+test('track - no auto and no rev', function (t) {
+  var tracker = ReleaseTracker({
+    appId: 'test-app-id',
+    organizationId: 'test-org-id',
+    secretToken: 'test-token',
+    auto: false
+  })
+
+  tracker(function (err) {
+    t.ok(util.isError(err))
+    t.equals(err.message, 'Required git revision not provided')
+    t.end()
+  })
+})
+
+test('track - http error', function (t) {
   var scope = nock('https://intake.opbeat.com')
     .filteringRequestBody(function () { return 'ok' })
     .post('/api/v1/organizations/test-org-id/apps/test-app-id/releases/', 'ok')
@@ -226,7 +273,7 @@ test('track - error', function (t) {
   })
 })
 
-test('track - no callback and error', function (t) {
+test('track - no callback and http error', function (t) {
   var scope = nock('https://intake.opbeat.com')
     .filteringRequestBody(function () { return 'ok' })
     .post('/api/v1/organizations/test-org-id/apps/test-app-id/releases/', 'ok')

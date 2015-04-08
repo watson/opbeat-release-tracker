@@ -33,6 +33,9 @@ properties:
   `OPBEAT_ORGANIZATION_ID` environment variable)
 - `secretToken` - The Opbeat secret token (falls back to the
   `OPBEAT_SECRET_ID` environment variable)
+- `auto` - If `true` (default) opbeat-release-tracker will try to
+  auto-detect the git rev and/or branch if not specifically given. Set
+  to `false` to disable this behavior
 - `cwd` - Directory where to auto-detect git rev or branch if those are
   not provided when tracking a release (falls back to `process.cwd()`)
 - `userAgent` - Set if you wish to override the default HTTP User-Agent

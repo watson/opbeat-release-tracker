@@ -14,14 +14,16 @@ var getTracker = function (client, defaults) {
     if (typeof opts === 'function') return track({}, opts)
     if (!opts) opts = {}
     if (!cb) cb = noop
+    if (!defaults.auto && !opts.rev) return process.nextTick(cb.bind(null, new Error('Required git revision not provided')))
 
     var cwd = opts.cwd || defaults.cwd || process.cwd()
 
     var next = afterAll(function (err, results) {
       if (err) return cb(err)
-      opts.rev = opts.rev || results[0]
-      opts.status = opts.status || 'completed'
-      opts.branch = opts.branch || results[1]
+      if (results[0]) opts.rev = results[0]
+      if (results[1]) opts.branch = results[1]
+      if (!opts.status) opts.status = 'completed'
+      if (!opts.rev) return cb(new Error('No git revision found'))
       client.request('releases', opts, function (err, res, body) {
         if (err) return cb(err)
         if (res.statusCode === 202) return cb()
@@ -40,16 +42,19 @@ var getTracker = function (client, defaults) {
       })
     })
 
-    if (!opts.rev) git.rev(cwd, next())
+    if (!opts.rev && defaults.auto) git.rev(cwd, next())
     else process.nextTick(next())
-    if (!opts.branch) git.branch(cwd, next())
+    if (!opts.branch && defaults.auto) git.branch(cwd, next())
     else process.nextTick(next())
   }
 }
 
 module.exports = function (opts) {
   if (!opts) opts = {}
-  var defaults = { cwd: opts.cwd }
+  var defaults = {
+    cwd: opts.cwd,
+    auto: 'auto' in opts ? opts.auto : true
+  }
   return getTracker(Client({
     appId: opts.appId || process.env.OPBEAT_APP_ID,
     organizationId: opts.organizationId || process.env.OPBEAT_ORGANIZATION_ID,
