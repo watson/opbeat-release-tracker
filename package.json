@@ -1,0 +1,40 @@
+{
+  "name": "opbeat-release-tracker",
+  "version": "0.0.0",
+  "description": "Stand-alone release tracker for Opbeat",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && tape test.js"
+  },
+  "keywords": [
+    "opbeat",
+    "ops",
+    "devops",
+    "deploy",
+    "deployment",
+    "deploying",
+    "track",
+    "tracking",
+    "release",
+    "releases"
+  ],
+  "author": "Thomas Watson Steen <w@tson.dk>",
+  "license": "MIT",
+  "dependencies": {
+    "after-all-results": "^2.0.0",
+    "opbeat-http-client": "^1.0.2"
+  },
+  "devDependencies": {
+    "nock": "^1.5.0",
+    "standard": "^3.3.2",
+    "tape": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/watson/opbeat-release-tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/watson/opbeat-release-tracker/issues"
+  },
+  "homepage": "https://github.com/watson/opbeat-release-tracker"
+}
