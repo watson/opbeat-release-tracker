@@ -21,7 +21,7 @@ npm install opbeat-release-tracker
 The module exposes a single init function:
 
 ```js
-var trackRelease = require('opbeat-release-trakcer')({ ... })
+var trackRelease = require('opbeat-release-tracker')({ ... })
 ```
 
 The init function takes an optional options hash with the following
