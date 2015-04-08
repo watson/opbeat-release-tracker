@@ -1,5 +1,6 @@
 'use strict'
 
+var util = require('util')
 var zlib = require('zlib')
 var test = require('tape')
 var nock = require('nock')
@@ -203,4 +204,44 @@ test('track - custom everything', function (t) {
       t.end()
     })
   })
+})
+
+test('track - error', function (t) {
+  var scope = nock('https://intake.opbeat.com')
+    .filteringRequestBody(function () { return 'ok' })
+    .post('/api/v1/organizations/test-org-id/apps/test-app-id/releases/', 'ok')
+    .reply(500)
+
+  var tracker = ReleaseTracker({
+    appId: 'test-app-id',
+    organizationId: 'test-org-id',
+    secretToken: 'test-token'
+  })
+
+  tracker(function (err) {
+    scope.done()
+    t.ok(util.isError(err))
+    t.equals(err.message, 'Unexpected Opbeat HTTP status code: 500')
+    t.end()
+  })
+})
+
+test('track - no callback and error', function (t) {
+  var scope = nock('https://intake.opbeat.com')
+    .filteringRequestBody(function () { return 'ok' })
+    .post('/api/v1/organizations/test-org-id/apps/test-app-id/releases/', 'ok')
+    .reply(500)
+
+  var tracker = ReleaseTracker({
+    appId: 'test-app-id',
+    organizationId: 'test-org-id',
+    secretToken: 'test-token'
+  })
+
+  tracker()
+
+  setTimeout(function () {
+    scope.done()
+    t.end()
+  }, 100)
 })
