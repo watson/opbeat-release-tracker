@@ -22,11 +22,11 @@
   "license": "MIT",
   "dependencies": {
     "after-all-results": "^2.0.0",
-    "opbeat-http-client": "^1.0.2"
+    "opbeat-http-client": "^1.0.3"
   },
   "devDependencies": {
-    "nock": "^1.5.0",
-    "standard": "^3.3.2",
+    "nock": "^1.6.1",
+    "standard": "^3.7.1",
     "tape": "^4.0.0"
   },
   "repository": {
