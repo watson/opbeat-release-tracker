@@ -1,6 +1,6 @@
 {
   "name": "opbeat-release-tracker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Stand-alone release tracker for Opbeat",
   "main": "index.js",
   "scripts": {
