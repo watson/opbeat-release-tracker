@@ -4,7 +4,9 @@
   "description": "Stand-alone release tracker for Opbeat",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape test.js"
+    "test": "standard && tape test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "opbeat",
@@ -22,11 +24,12 @@
   "license": "MIT",
   "dependencies": {
     "after-all-results": "^2.0.0",
-    "opbeat-http-client": "^1.0.3"
+    "opbeat-http-client": "^1.0.3",
+    "snyk": "^1.88.2"
   },
   "devDependencies": {
     "nock": "^1.6.1",
-    "standard": "^3.7.1",
+    "standard": "^6.0.0",
     "tape": "^4.0.0"
   },
   "repository": {
@@ -36,5 +39,6 @@
   "bugs": {
     "url": "https://github.com/watson/opbeat-release-tracker/issues"
   },
-  "homepage": "https://github.com/watson/opbeat-release-tracker"
+  "homepage": "https://github.com/watson/opbeat-release-tracker",
+  "snyk": true
 }
