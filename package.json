@@ -25,7 +25,7 @@
     "opbeat-http-client": "^1.0.3"
   },
   "devDependencies": {
-    "nock": "^1.6.1",
+    "nock": "^11.9.0",
     "standard": "^3.7.1",
     "tape": "^4.0.0"
   },
